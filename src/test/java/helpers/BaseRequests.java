@@ -3,15 +3,12 @@ package helpers;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.testng.Assert;
 import pojo.DataError;
 import pojo.DataPost;
 import pojo.DataUser;
 
 import java.util.Base64;
 
-import static helpers.PostRepository.getPostById;
-import static helpers.UserRepository.getUserById;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -353,25 +350,5 @@ public class BaseRequests {
                 .email(email)
                 .password(password)
                 .build();
-    }
-
-    /**
-     * Проверяет, что пользователь существует в базе и его параметры совпадают.
-     *
-     * @param user_id  ID пользователя.
-     * @param username Ожидаемый логин пользователя
-     */
-    public static void checkSuccessUserDb(Integer user_id, String username) {
-        Assert.assertEquals(getUserById(user_id).getId(), user_id, "ID пользователя в базе не совпадает");
-        Assert.assertEquals(getUserById(user_id).getUsername(), username, "Имя пользователя в базе не совпадает");
-    }
-
-    /**
-     * Проверяет, что пост отсутствует в базе.
-     *
-     * @param post_id ID поста.
-     */
-    public static void checkErrorDb(Integer post_id) {
-        Assert.assertNull(getPostById(post_id), "Пост найден в базе");
     }
 }

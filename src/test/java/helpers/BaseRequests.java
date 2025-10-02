@@ -13,7 +13,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-
 public class BaseRequests {
 
     /**
@@ -223,7 +222,6 @@ public class BaseRequests {
                 .as(DataError.class);
     }
 
-
     /**
      * Выполняет удаление поста с авторизацией и проверяет, что статус изменился на 'trash'.
      *
@@ -276,7 +274,6 @@ public class BaseRequests {
                 .body("data.status", equalTo(401))
                 .extract().as(DataError.class);
     }
-
 
     /**
      * Успешно обновляет пост по заданным данным.
@@ -343,11 +340,11 @@ public class BaseRequests {
     /**
      * Создает объект DataUser с заданным ID и тестовыми данными.
      *
-     * @param username   Логин пользователя
-     * @param password  Пароль пользователя
+     * @param username Логин пользователя
+     * @param password Пароль пользователя
      * @return Объект DataUser с заполненными полями.
      */
-    public static DataUser createUserBody(String username, String email,  String password) {
+    public static DataUser createUserBody(String username, String email, String password) {
         return DataUser.builder()
                 .username(username)
                 .email(email)

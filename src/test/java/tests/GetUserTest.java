@@ -38,6 +38,9 @@ public class GetUserTest extends BaseTest {
     @Test
     public void getUserDBTest() {
         User responseUser = getItemById(User.class, USERS_PATH, userId, TOKEN);
-        checkSuccessUserDb(userId, responseUser.getName());
+
+        //Проверяет, что пользователь существует в базе и его параметры совпадают.
+        Assert.assertEquals(getUserById(userId).getId(), userId, "ID пользователя в базе не совпадает");
+        Assert.assertEquals(getUserById(userId).getUsername(), responseUser.getName(), "Имя пользователя в базе не совпадает");
     }
 }

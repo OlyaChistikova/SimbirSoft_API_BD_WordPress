@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static helpers.BaseRequests.*;
+import static helpers.PostRepository.*;
 
 public class DeletePostTest extends BaseTest {
     private Integer postId;
@@ -29,8 +29,8 @@ public class DeletePostTest extends BaseTest {
         Assert.assertFalse(ids.contains(postId));
 
         //Проверяем в базе данных, что пост поменял статус на удаленный
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
     }
 
     @Test
@@ -43,8 +43,8 @@ public class DeletePostTest extends BaseTest {
         Assert.assertFalse(ids.contains(postId));
 
         //Проверяем в базе данных, что пост поменял статус на удаленный
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
     }
 
     @Test
@@ -56,8 +56,8 @@ public class DeletePostTest extends BaseTest {
         Assert.assertTrue(ids.contains(postId));
 
         //Проверяем в базе данных, что пост не поменял статус на удаленный
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "publish", "Статус поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(getPostById(postId).getStatus(), "publish", "Статус поста в базе не совпадает");
 
         deleteItemById(POSTS_PATH, postId, TOKEN);
     }

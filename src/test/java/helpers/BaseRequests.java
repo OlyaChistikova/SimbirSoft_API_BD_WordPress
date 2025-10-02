@@ -3,11 +3,15 @@ package helpers;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
+import org.testng.Assert;
 import pojo.DataError;
 import pojo.DataPost;
+import pojo.DataUser;
 
 import java.util.Base64;
 
+import static helpers.PostRepository.getPostById;
+import static helpers.UserRepository.getUserById;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -23,6 +27,11 @@ public class BaseRequests {
      * Путь для взаимодействия с постами.
      */
     public static final String POSTS_PATH = ParametersProvider.getProperty("posts_path");
+
+    /**
+     * Путь для взаимодействия с пользователями.
+     */
+    public static final String USERS_PATH = ParametersProvider.getProperty("users_path");
 
     public static RequestSpecification requestSpec(String authToken) {
         return new RequestSpecBuilder()
@@ -329,5 +338,40 @@ public class BaseRequests {
                 .body("data.status", equalTo(401))
                 .extract()
                 .as(DataError.class);
+    }
+
+    /**
+     * Создает объект DataUser с заданным ID и тестовыми данными.
+     *
+     * @param username Логин пользователя
+     * @param password Пароль пользователя
+     * @return Объект DataUser с заполненными полями.
+     */
+    public static DataUser createUserBody(String username, String email, String password) {
+        return DataUser.builder()
+                .username(username)
+                .email(email)
+                .password(password)
+                .build();
+    }
+
+    /**
+     * Проверяет, что пользователь существует в базе и его параметры совпадают.
+     *
+     * @param user_id  ID пользователя.
+     * @param username Ожидаемый логин пользователя
+     */
+    public static void checkSuccessUserDb(Integer user_id, String username) {
+        Assert.assertEquals(getUserById(user_id).getId(), user_id, "ID пользователя в базе не совпадает");
+        Assert.assertEquals(getUserById(user_id).getUsername(), username, "Имя пользователя в базе не совпадает");
+    }
+
+    /**
+     * Проверяет, что пост отсутствует в базе.
+     *
+     * @param post_id ID поста.
+     */
+    public static void checkErrorDb(Integer post_id) {
+        Assert.assertNull(getPostById(post_id), "Пост найден в базе");
     }
 }

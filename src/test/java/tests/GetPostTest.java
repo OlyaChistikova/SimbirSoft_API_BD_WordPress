@@ -52,7 +52,10 @@ public class GetPostTest extends BaseTest {
         DataPost responsePost = getItemById(DataPost.class, POSTS_PATH, publicPostId, TOKEN);
         String contentResponse = responsePost.getContent().getRendered().replace("<p>", "").replace("</p>", "").trim();
 
-        checkSuccessPostDb(publicPostId, responsePost.getTitle().getRendered(), contentResponse, responsePost.getStatus());
+        Assert.assertEquals(getPostById(publicPostId).getId(), publicPostId, "ID поста в базе не совпадает");
+        Assert.assertEquals(getPostById(publicPostId).getTitle().getRaw(), responsePost.getTitle().getRendered(), "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(getPostById(publicPostId).getContent().getRaw(), contentResponse, "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(getPostById(publicPostId).getStatus(), responsePost.getStatus(), "Статус поста в базе не совпадает");
     }
 
     @Test

@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pojo.DataError;
@@ -29,10 +30,17 @@ public class CreatePostTest extends BaseTest {
         Assert.assertTrue(ids.contains(postId));
         Assert.assertTrue(titles.contains(responsePost.getTitle().getRendered()));
 
-        checkSuccessPostDb(postId, requestPost.getTitle().getRaw(), requestPost.getContent().getRaw(), requestPost.getStatus());
+        //Проверяет, что пост существует в базе и его параметры совпадают.
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getTitle().getRaw(), requestPost.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getContent().getRaw(), requestPost.getContent().getRaw(), "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), requestPost.getStatus(), "Статус поста в базе не совпадает");
 
         deleteItemById(POSTS_PATH, postId, TOKEN);
-        checkDeleteDb(postId, "trash");
+
+        //Проверяем в базе данных, что пост поменял статус на удаленный
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
     }
 
     @Test
@@ -48,10 +56,17 @@ public class CreatePostTest extends BaseTest {
         DataPost postById = getItemById(DataPost.class, POSTS_PATH, postId, TOKEN);
         Assert.assertEquals(postById.getTitle().getRendered(), responsePost.getTitle().getRendered());
 
-        checkSuccessPostDb(postId, responsePost.getTitle().getRaw(), responsePost.getContent().getRaw(), responsePost.getStatus());
+        //Проверяет, что пост существует в базе и его параметры совпадают.
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getTitle().getRaw(), responsePost.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getContent().getRaw(), responsePost.getContent().getRaw(), "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), responsePost.getStatus(), "Статус поста в базе не совпадает");
 
         deleteItemById(POSTS_PATH, postId, TOKEN);
-        checkDeleteDb(postId, "trash");
+
+        //Проверяем в базе данных, что пост поменял статус на удаленный
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
     }
 
     @Test

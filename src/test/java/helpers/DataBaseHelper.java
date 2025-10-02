@@ -22,7 +22,7 @@ public class DataBaseHelper {
      * @param sql    SQL-запрос на обновление
      * @param params Массив параметров для заполнения в запросе
      */
-    private void executeUpdate(String sql, Object... params) {
+    private static void executeUpdate(String sql, Object... params) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD); // Получаем соединение из пула
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             for (int i = 0; i < params.length; i++) {
@@ -44,7 +44,7 @@ public class DataBaseHelper {
      * @param <T>       Тип возвращаемых данных
      * @return Результат выполнения запроса
      */
-    private <T> T executeQuery(String sql, RowMapper<T> rowMapper, Object... params) {
+    private static <T> T executeQuery(String sql, RowMapper<T> rowMapper, Object... params) {
         T result = null;
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -106,7 +106,7 @@ public class DataBaseHelper {
      * @param id Уникальный идентификатор поста
      * @return Объект DataPost, соответствующий запрошенному посту, или null, если пост не найден
      */
-    public DataPost getPostById(int id) {
+    public static DataPost getPostById(int id) {
         String sql = "SELECT ID, post_title, post_content, post_status FROM wp_posts WHERE ID = ?";
         return executeQuery(sql, rs -> {
             if (rs.next()) {

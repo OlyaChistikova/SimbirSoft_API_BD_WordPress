@@ -1,5 +1,6 @@
 package tests;
 
+import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -27,7 +28,9 @@ public class DeletePostTest extends BaseTest {
         List<Integer> ids = listPosts.stream().map(DataPost::getId).collect(Collectors.toList());
         Assert.assertFalse(ids.contains(postId));
 
-        checkDeleteDb(postId, "trash");
+        //Проверяем в базе данных, что пост поменял статус на удаленный
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
     }
 
     @Test
@@ -39,7 +42,9 @@ public class DeletePostTest extends BaseTest {
         List<Integer> ids = listPosts.stream().map(DataPost::getId).collect(Collectors.toList());
         Assert.assertFalse(ids.contains(postId));
 
-        checkDeleteDb(postId, "trash");
+        //Проверяем в базе данных, что пост поменял статус на удаленный
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "trash", "Статус поста в базе не совпадает");
     }
 
     @Test
@@ -50,7 +55,9 @@ public class DeletePostTest extends BaseTest {
         List<Integer> ids = listPosts.stream().map(DataPost::getId).collect(Collectors.toList());
         Assert.assertTrue(ids.contains(postId));
 
-        checkDeleteDb(postId, "publish");
+        //Проверяем в базе данных, что пост не поменял статус на удаленный
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "Пост не найден в базе");
+        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), "publish", "Статус поста в базе не совпадает");
 
         deleteItemById(POSTS_PATH, postId, TOKEN);
     }

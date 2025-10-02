@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static helpers.BaseRequests.*;
+import static helpers.PostRepository.*;
 
 public class UpdatePostTest extends BaseTest {
     private Integer postId;
@@ -45,10 +45,10 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertEquals(actualContentPost, responsePost.getContent().getRaw());
 
         //Проверяет, что пост существует в базе и его параметры совпадают.
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getTitle().getRaw(), responsePost.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getContent().getRaw(), responsePost.getContent().getRaw(), "Содержимое поста в базе не совпадает");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), responsePost.getStatus(), "Статус поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getTitle().getRaw(), responsePost.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getContent().getRaw(), responsePost.getContent().getRaw(), "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getStatus(), responsePost.getStatus(), "Статус поста в базе не совпадает");
     }
 
     @DataProvider(name = "updateIdProvider")
@@ -72,7 +72,7 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertFalse(titles.get(0).contains(requestUpdateBody.getTitle().getRendered()));
 
         //Проверяет, что пост отсутствует в базе.
-        Assert.assertNull(DataBaseHelper.getPostById(updateId), "Пост найден в базе");
+        Assert.assertNull(getPostById(updateId), "Пост найден в базе");
     }
 
     @Test
@@ -94,9 +94,9 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertEquals(statusResponse, responseAfterGetPost.getStatus());
 
         //Проверяем, что пост существует в базе и его параметры совпадают.
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getTitle().getRaw(), requestBody.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getContent().getRaw(), requestBody.getContent().getRaw(), "Содержимое поста в базе не совпадает");
-        Assert.assertEquals(DataBaseHelper.getPostById(postId).getStatus(), requestBody.getStatus(), "Статус поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getTitle().getRaw(), requestBody.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getContent().getRaw(), requestBody.getContent().getRaw(), "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getStatus(), requestBody.getStatus(), "Статус поста в базе не совпадает");
     }
 }

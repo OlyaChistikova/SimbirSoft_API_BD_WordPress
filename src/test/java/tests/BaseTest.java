@@ -3,9 +3,11 @@ package tests;
 import helpers.BaseRequests;
 import helpers.ParametersProvider;
 import io.restassured.response.ResponseBodyExtractionOptions;
+import org.testng.Assert;
 
 import java.util.List;
 
+import static helpers.PostRepository.getPostById;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -94,5 +96,31 @@ public class BaseTest {
                 .delete(resourcePath + "/" + itemId)
                 .then()
                 .statusCode(200);
+    }
+
+    /**
+     * Проверяет, что пост существует в базе и его параметры совпадают.
+     *
+     * @param post_id ID поста.
+     * @param title   Ожидаемый заголовок.
+     * @param content Ожидаемое содержание.
+     * @param status  Ожидаемый статус.
+     */
+    public void checkSuccessPostDb(Integer post_id, String title, String content, String status) {
+        Assert.assertEquals(getPostById(post_id).getId(), post_id, "ID поста в базе не совпадает");
+        Assert.assertEquals(getPostById(post_id).getTitle().getRaw(), title, "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(getPostById(post_id).getContent().getRaw(), content, "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(getPostById(post_id).getStatus(), status, "Статус поста в базе не совпадает");
+    }
+
+    /**
+     * Проверяет, что пост существует в базе и его статус соответствует ожидаемому.
+     *
+     * @param post_id ID поста.
+     * @param status  Ожидаемый статус.
+     */
+    public void checkDeleteDb(Integer post_id, String status) {
+        Assert.assertEquals(getPostById(post_id).getId(), post_id, "Пост не найден в базе");
+        Assert.assertEquals(getPostById(post_id).getStatus(), status, "Статус поста в базе не совпадает");
     }
 }

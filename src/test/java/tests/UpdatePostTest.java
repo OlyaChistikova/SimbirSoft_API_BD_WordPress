@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -16,7 +15,6 @@ import static helpers.BaseRequests.*;
 public class UpdatePostTest extends BaseTest {
     private Integer postId;
     private DataPost requestBody;
-    private final DataBaseHelper repo = new DataBaseHelper();
 
     @BeforeMethod
     public void createPostForUpdate() {
@@ -45,7 +43,7 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertEquals(listPosts.get(0).getTitle().getRendered(), responsePost.getTitle().getRendered());
         Assert.assertEquals(actualContentPost, responsePost.getContent().getRaw());
 
-        checkSuccessPostDb(postId, responsePost.getTitle().getRaw(), responsePost.getContent().getRaw(), responsePost.getStatus(), repo);
+        checkSuccessPostDb(postId, responsePost.getTitle().getRaw(), responsePost.getContent().getRaw(), responsePost.getStatus());
     }
 
     @DataProvider(name = "updateIdProvider")
@@ -89,6 +87,6 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertEquals(contentResponse, responseAfterGetPost.getContent().getRendered().replace("<p>", "").replace("</p>", "").trim());
         Assert.assertEquals(statusResponse, responseAfterGetPost.getStatus());
 
-        checkSuccessPostDb(postId, requestBody.getTitle().getRaw(), requestBody.getContent().getRaw(), requestBody.getStatus(), repo);
+        checkSuccessPostDb(postId, requestBody.getTitle().getRaw(), requestBody.getContent().getRaw(), requestBody.getStatus());
     }
 }

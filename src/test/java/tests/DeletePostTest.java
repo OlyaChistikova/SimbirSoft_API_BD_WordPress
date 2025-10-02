@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -13,7 +12,6 @@ import static helpers.BaseRequests.*;
 
 public class DeletePostTest extends BaseTest {
     private Integer postId;
-    private final DataBaseHelper repo = new DataBaseHelper();
 
     @BeforeMethod
     public void createPostForDelete() {

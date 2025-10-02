@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pojo.DataError;
@@ -12,7 +11,6 @@ import java.util.stream.Collectors;
 import static helpers.BaseRequests.*;
 
 public class CreatePostTest extends BaseTest {
-    private final DataBaseHelper repo = new DataBaseHelper();
 
     @Test
     public void createPostWithCorrectDataTest() {
@@ -31,7 +29,7 @@ public class CreatePostTest extends BaseTest {
         Assert.assertTrue(ids.contains(postId));
         Assert.assertTrue(titles.contains(responsePost.getTitle().getRendered()));
 
-        checkSuccessPostDb(postId, requestPost.getTitle().getRaw(), requestPost.getContent().getRaw(), requestPost.getStatus(), repo);
+        checkSuccessPostDb(postId, requestPost.getTitle().getRaw(), requestPost.getContent().getRaw(), requestPost.getStatus());
 
         deleteItemById(POSTS_PATH, postId, TOKEN);
         checkDeleteDb(postId, "trash");
@@ -50,7 +48,7 @@ public class CreatePostTest extends BaseTest {
         DataPost postById = getItemById(DataPost.class, POSTS_PATH, postId, TOKEN);
         Assert.assertEquals(postById.getTitle().getRendered(), responsePost.getTitle().getRendered());
 
-        checkSuccessPostDb(postId, responsePost.getTitle().getRaw(), responsePost.getContent().getRaw(), responsePost.getStatus(), repo);
+        checkSuccessPostDb(postId, responsePost.getTitle().getRaw(), responsePost.getContent().getRaw(), responsePost.getStatus());
 
         deleteItemById(POSTS_PATH, postId, TOKEN);
         checkDeleteDb(postId, "trash");

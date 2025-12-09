@@ -343,11 +343,11 @@ public class BaseRequests {
     /**
      * Создает объект DataUser с заданным ID и тестовыми данными.
      *
-     * @param username   Логин пользователя
-     * @param password  Пароль пользователя
+     * @param username Логин пользователя
+     * @param password Пароль пользователя
      * @return Объект DataUser с заполненными полями.
      */
-    public static DataUser createUserBody(String username, String email,  String password) {
+    public static DataUser createUserBody(String username, String email, String password) {
         return DataUser.builder()
                 .username(username)
                 .email(email)

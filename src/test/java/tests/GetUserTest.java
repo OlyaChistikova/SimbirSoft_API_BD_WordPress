@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import pojo.DataUser;
@@ -9,17 +8,22 @@ import pojo.User;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static helpers.BaseRequests.createUserBody;
+import static helpers.BaseRequests.*;
+import static helpers.UserRepository.*;
 
 public class GetUserTest extends BaseTest {
     private Integer userId;
-    private final DataBaseHelper repo = new DataBaseHelper();
 
-    @BeforeMethod
+    @BeforeClass
     public void createUserDB() {
         DataUser requestPost = createUserBody(usernameTest, emailTest, passwordTest);
-        repo.addUser(requestPost);
-        userId = repo.getUserByName(requestPost.getUsername()).getId();
+        addUser(requestPost);
+        userId = getUserByName(requestPost.getUsername()).getId();
+    }
+
+    @AfterClass
+    public void deleteUserDB() {
+        deleteUser(userId);
     }
 
     @Test
@@ -32,13 +36,11 @@ public class GetUserTest extends BaseTest {
     }
 
     @Test
-    public void getPublicPostDBTest() {
+    public void getUserDBTest() {
         User responseUser = getItemById(User.class, USERS_PATH, userId, TOKEN);
-        checkSuccessUserDb(userId, responseUser.getName());
-    }
 
-    @AfterMethod
-    public void deleteUserDB() {
-        repo.deleteUser(userId);
+        //Проверяет, что пользователь существует в базе и его параметры совпадают.
+        Assert.assertEquals(getUserById(userId).getId(), userId, "ID пользователя в базе не совпадает");
+        Assert.assertEquals(getUserById(userId).getUsername(), responseUser.getName(), "Имя пользователя в базе не совпадает");
     }
 }

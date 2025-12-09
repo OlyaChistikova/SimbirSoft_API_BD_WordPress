@@ -4,8 +4,6 @@ import pojo.DataPost;
 import pojo.DataUser;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DataBaseHelper {
 
@@ -23,7 +21,7 @@ public class DataBaseHelper {
      * @param sql    SQL-запрос на обновление
      * @param params Массив параметров для заполнения в запросе
      */
-    private void executeUpdate(String sql, Object... params) {
+    static void executeUpdate(String sql, Object... params) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD); // Получаем соединение из пула
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             for (int i = 0; i < params.length; i++) {
@@ -45,7 +43,7 @@ public class DataBaseHelper {
      * @param <T>       Тип возвращаемых данных
      * @return Результат выполнения запроса
      */
-    private <T> T executeQuery(String sql, RowMapper<T> rowMapper, Object... params) {
+    static <T> T executeQuery(String sql, RowMapper<T> rowMapper, Object... params) {
         T result = null;
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

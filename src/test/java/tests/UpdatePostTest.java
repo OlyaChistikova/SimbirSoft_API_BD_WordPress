@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.DataBaseHelper;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -12,11 +11,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static helpers.BaseRequests.*;
+import static helpers.PostRepository.*;
 
 public class UpdatePostTest extends BaseTest {
     private Integer postId;
     private DataPost requestBody;
-    private final DataBaseHelper repo = new DataBaseHelper();
 
     @BeforeMethod
     public void createPostForUpdate() {
@@ -45,7 +44,11 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertEquals(listPosts.get(0).getTitle().getRendered(), responsePost.getTitle().getRendered());
         Assert.assertEquals(actualContentPost, responsePost.getContent().getRaw());
 
-        checkSuccessPostDb(postId, responsePost.getTitle().getRaw(), responsePost.getContent().getRaw(), responsePost.getStatus(), repo);
+        //Проверяет, что пост существует в базе и его параметры совпадают.
+        Assert.assertEquals(getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getTitle().getRaw(), responsePost.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getContent().getRaw(), responsePost.getContent().getRaw(), "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getStatus(), responsePost.getStatus(), "Статус поста в базе не совпадает");
     }
 
     @DataProvider(name = "updateIdProvider")
@@ -68,7 +71,8 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertNotEquals(listPosts.get(0).getId(), updateId);
         Assert.assertFalse(titles.get(0).contains(requestUpdateBody.getTitle().getRendered()));
 
-        checkErrorDb(updateId);
+        //Проверяет, что пост отсутствует в базе.
+        Assert.assertNull(getPostById(updateId), "Пост найден в базе");
     }
 
     @Test
@@ -89,6 +93,10 @@ public class UpdatePostTest extends BaseTest {
         Assert.assertEquals(contentResponse, responseAfterGetPost.getContent().getRendered().replace("<p>", "").replace("</p>", "").trim());
         Assert.assertEquals(statusResponse, responseAfterGetPost.getStatus());
 
-        checkSuccessPostDb(postId, requestBody.getTitle().getRaw(), requestBody.getContent().getRaw(), requestBody.getStatus(), repo);
+        //Проверяем, что пост существует в базе и его параметры совпадают.
+        Assert.assertEquals(getPostById(postId).getId(), postId, "ID поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getTitle().getRaw(), requestBody.getTitle().getRaw(), "Заголовок поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getContent().getRaw(), requestBody.getContent().getRaw(), "Содержимое поста в базе не совпадает");
+        Assert.assertEquals(getPostById(postId).getStatus(), requestBody.getStatus(), "Статус поста в базе не совпадает");
     }
 }

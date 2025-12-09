@@ -5,7 +5,6 @@ import helpers.BaseRequests;
 import helpers.DataBaseHelper;
 import helpers.ParametersProvider;
 import io.restassured.response.ResponseBodyExtractionOptions;
-import org.testng.Assert;
 
 import java.util.List;
 
@@ -13,11 +12,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 public class BaseTest {
-
-    /**
-     * Экземпляр помощника для взаимодействия с базой данных.
-     */
-    private final DataBaseHelper dbHelper = new DataBaseHelper();
 
     /**
      * Токен авторизации для доступа к API.

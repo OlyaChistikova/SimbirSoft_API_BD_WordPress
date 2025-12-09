@@ -1,6 +1,5 @@
 package tests;
 
-import helpers.BaseRequests;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -33,7 +32,7 @@ public class AuthUserTest extends BaseTest {
 
     @Test
     public void authWithoutToken() {
-        DataError responseError = BaseRequests.getPostByIdWithoutAuth(postId);
+        DataError responseError = getPostByIdWithoutAuth(postId);
         Assert.assertEquals(responseError.getCode(), "rest_forbidden");
         Assert.assertEquals(responseError.getMessage(), "Извините, вам не разрешено выполнять данное действие.");
         Assert.assertEquals(responseError.getData().getStatus(), 401);

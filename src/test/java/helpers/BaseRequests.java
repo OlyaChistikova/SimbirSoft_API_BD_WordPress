@@ -13,6 +13,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
+
 public class BaseRequests {
 
     /**
@@ -222,6 +223,7 @@ public class BaseRequests {
                 .as(DataError.class);
     }
 
+
     /**
      * Выполняет удаление поста с авторизацией и проверяет, что статус изменился на 'trash'.
      *
@@ -274,6 +276,7 @@ public class BaseRequests {
                 .body("data.status", equalTo(401))
                 .extract().as(DataError.class);
     }
+
 
     /**
      * Успешно обновляет пост по заданным данным.
